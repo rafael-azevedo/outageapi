@@ -18,7 +18,7 @@ import (
 	"errors"
 	"fmt"
 
-	"github.com/rafael-azevedo/HPOMOutageTool/utils"
+	"github.com/rafael-azevedo/outageapi/utils"
 	"github.com/spf13/cobra"
 )
 

@@ -40,7 +40,25 @@ func main() {
 		ReadTimeout:  30 * time.Second,
 	}
 
-	log.Printf("Application Started at http://%s\n", srv.Addr)
+	fmt.Println(`
+	 .d8888b.  888                      888                   
+	d88P  Y88b 888                      888                   
+	Y88b.      888                      888                   
+	 "Y888b.   888888  8888b.  88888b.  888  .d88b.  .d8888b  
+	    "Y88b. 888        "88b 888 "88b 888 d8P  Y8b 88K      
+	      "888 888    .d888888 888  888 888 88888888 "Y8888b. 
+	Y88b  d88P Y88b.  888  888 888 d88P 888 Y8b.          X88 
+	 "Y8888P"   "Y888 "Y888888 88888P"  888  "Y8888   88888P' 
+	                           888                            
+	                           888                            
+	                           888   
+    
+	  01010011 01110100 01100001 01110000 01101100 01100101 
+	  01110011 00100000 01001111 01110101 01110100 01100001 
+	  01100111 01100101 00100000 01000001 01010000 01001001 
+
+	`)
+	log.Printf("Outage Api Started at http://%s\n", srv.Addr)
 	fmt.Println(router.GetActiveRoutes(srv.Addr))
 	log.Fatal(srv.ListenAndServe())
 }

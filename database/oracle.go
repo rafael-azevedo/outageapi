@@ -6,7 +6,7 @@ import (
 	"os"
 
 	_ "github.com/mattn/go-oci8"
-	"github.com/rafael-azevedo/HPOMOutageTool/utils"
+	"github.com/rafael-azevedo/outageapi/utils"
 	"github.com/spf13/viper"
 )
 
