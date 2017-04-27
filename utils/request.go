@@ -14,12 +14,14 @@ import (
 	"strconv"
 )
 
+type Status int
+
 const (
 	// Status id iterperetation
-	StatusSuccess    = 0
-	StatusFailed     = 1
-	StatusPending    = 2
-	StatusProcessing = 3
+	Pending Status = iota + 1
+	Processing
+	Successful
+	Failed
 
 	// HPOM constants
 	OVBin        = "/opt/OV/bin"
@@ -30,15 +32,19 @@ const (
 	OutageScript = ScriptRepo + "outage.ksh"
 )
 
-var statusText = map[int]string{
-	StatusPending:    "Pending",
-	StatusProcessing: "Processing",
-	StatusFailed:     "Failed",
-	StatusSuccess:    "Successs",
-}
-
-func StatusText(code int) string {
-	return statusText[code]
+func (s Status) String() string {
+	switch s {
+	case Pending:
+		return "Pending"
+	case Processing:
+		return "Processing"
+	case Successful:
+		return "Successful"
+	case Failed:
+		return "Failed"
+	default:
+		return "Unknown"
+	}
 }
 
 type SubRequest struct {
@@ -53,7 +59,7 @@ type OutageRequest struct {
 	Email        string       `json:"email"`
 	ChangeTicket string       `json:"changeticket"`
 	IP           string       `json:"ip"`
-	Status       int          `json:"status"`
+	Status       Status       `json:"status"`
 	ServerList   []SubRequest `json:"serverlist"`
 }
 
@@ -77,7 +83,7 @@ func CreateRequest(r *http.Request) (OutageRequest, error) {
 	if err := json.Unmarshal(body, &or); err != nil {
 		return or, err
 	}
-	or.Status = 2
+	or.Status = 1
 	or.IP = GetIP(r)
 
 	LID, err := LastID()
@@ -88,7 +94,7 @@ func CreateRequest(r *http.Request) (OutageRequest, error) {
 	or.ID = LID + 1
 
 	for i := range or.ServerList {
-		or.ServerList[i].Status = 2
+		or.ServerList[i].Status = 1
 	}
 	return or, nil
 }
