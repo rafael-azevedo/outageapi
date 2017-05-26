@@ -78,6 +78,7 @@ func (m *MultiStatus) OutageStatus() error {
 
 	//Connect to the database
 	ConnString := oDB.Username + "/" + oDB.Password + "@" + oDB.HostName + ":" + oDB.Port + "/" + oDB.ServiceName
+	fmt.Println(ConnString)
 	db, err := sql.Open("oci8", ConnString)
 	if err != nil {
 		return err

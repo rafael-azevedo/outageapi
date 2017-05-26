@@ -29,7 +29,7 @@ const (
 	NodeGroup    = "group_name=outage"
 	OPCNode      = OVBin + "/opcnode"
 	ScriptRepo   = "/var/opt/OV/SPLS_scripts/"
-	OutageScript = ScriptRepo + "outage.ksh"
+	OutageScript = ScriptRepo + "outageapi.ksh"
 )
 
 func (s Status) String() string {
@@ -137,17 +137,17 @@ func ReadOutageLog(id int) (OutageRequest, error) {
 }
 
 func (or *OutageRequest) Assign() error {
-	or.Status = 3
+	or.Status = 2
 	for i, item := range or.ServerList {
 		out, err := AssignNodeScript(item.Host)
 		if err != nil {
-			or.ServerList[i].Status = 1
+			or.ServerList[i].Status = 4
 		} else if err == nil {
-			or.ServerList[i].Status = 0
+			or.ServerList[i].Status = 3
 		}
 		log.Printf("%s\n%s\n", item.Host, out)
 	}
-	or.Status = 1
+	or.Status = 3
 	err := or.LogRequest()
 	if err != nil {
 		return err
@@ -156,17 +156,18 @@ func (or *OutageRequest) Assign() error {
 }
 
 func (or *OutageRequest) Deassign() error {
-	or.Status = 3
+	or.Status = 2
 	for i, item := range or.ServerList {
 		out, err := DeassignNodeScript(item.Host)
 		if err != nil {
-			or.ServerList[i].Status = 1
+			log.Println(err)
+			or.ServerList[i].Status = 4
 		} else if err == nil {
-			or.ServerList[i].Status = 0
+			or.ServerList[i].Status = 3
 		}
 		log.Printf("%s\n%s\n", item.Host, out)
 	}
-	or.Status = 1
+	or.Status = 3
 	err := or.LogRequest()
 	if err != nil {
 		return err
